@@ -26,9 +26,9 @@
 </head>
 
 <body>
-
+    <x-navbar />
     @yield('content')
-
+    <x-footer />
 
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
