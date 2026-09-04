@@ -11,6 +11,22 @@
 
 @section('content')
     <div class="container py-4">
+        @if (Session::get('success'))
+            <div class="alert alert-important alert-success alert-dismissible" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l5 5l10 -10"></path>
+                        </svg>
+                    </div>
+                    <div>{{ Session::get('success') }}</div>
+                </div>
+                <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+        @endif
         {{-- Carousel Section --}}
         <div id="carousel-sample" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -259,7 +275,7 @@
         <div class="mt-4">
             <div class="d-flex align-items-center gap-2 mb-4">
                 <span class="badge bg-blue text-blue-fg p-2"><i class="fa-solid fa-book fs-3"></i></span>
-                <h2 class="mt-3 text-dark" style="font-weight: bold">Buku Gratis</h2>
+                <h2 class="mt-0 text-dark">Buku Gratis</h2>
             </div>
             {{-- Daftar Buku --}}
             <div class="row">

@@ -77,8 +77,12 @@
         </div>
 
         <div class="navbar-nav flex-row order-md-last ms-auto gap-2">
-            <a href="#" class="btn btn-primary">Masuk</a>
-            <a href="#" class="btn btn-light">Daftar</a>
+            @if (Auth::check())
+                <a href="{{ route('logout') }}" class="btn btn-danger">Log Out</a>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-primary">Masuk</a>
+                <a href="{{ route('register') }}" class="btn btn-light">Daftar</a>
+            @endif
         </div>
     </div>
 </header>
