@@ -7,25 +7,30 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/register', function () {
-    return view('register');
-})->name('register');
+Route::middleware(['IsLoggedIn'])->group(function () {
+    Route::get('/logout', [
+        UserController::class,
+        'logout'
+    ])->name('logout');
+});
 
-Route::post('/register', [
-    UserController::class,
-    'register'
-])->name('register.store');
+Route::middleware(['IsGuest'])->group(function () {
 
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
+    Route::get('/register', function () {
+        return view('register');
+    })->name('register');
 
-Route::post('/login', [
-    UserController::class,
-    'login'
-])->name('login.store');
+    Route::post('/register', [
+        UserController::class,
+        'register'
+    ])->name('register.store')->middleware('throttle:5,1');
 
-Route::get('/logout', [
-    UserController::class,
-    'logout'
-])->name('logout');
+    Route::get('/login', function () {
+        return view('login');
+    })->name('login');
+
+    Route::post('/login', [
+        UserController::class,
+        'login'
+    ])->name('login.store')->middleware('throttle:5,1');
+});

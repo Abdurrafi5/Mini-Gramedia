@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -13,8 +14,8 @@ class UserController extends Controller
     {
         $validateData = $request->validate([
             'name' => ['required', 'min:3'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:8', 'max:10'],
+            'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
+            'password' => ['required', 'min:8', 'max:10', 'confirmed', Password::min(8)->max(10)->uncompromised()],
         ], [
             'name.required' => 'Nama lengkap harus diisi',
             'name.min' => 'Nama lengkap harus diisi minimal 3 karakter',
@@ -23,6 +24,7 @@ class UserController extends Controller
             'password.required' => 'Password harus diisi',
             'password.min' => 'Password harus diisi minimal 8 karakter',
             'password.max' => 'Password harus diisi hanya sampai 10 karakter',
+            'password.confirmed' => 'Konfirmasi password tidak sama dengan password yang diberikan',
         ]);
         $createAccount = User::create([
             'name' => $validateData['name'],
@@ -33,7 +35,8 @@ class UserController extends Controller
         return redirect()->route('login')->with('success', 'Berhasil membuat akun! Silahkan login');
     }
 
-    public function login(Request  $request) {
+    public function login(Request  $request)
+    {
         $validateData = $request->validate([
             'email' => ['required'],
             'password' => ['required'],
@@ -45,15 +48,18 @@ class UserController extends Controller
         $auth = $request->except(["_token"]);
         $checkAuth = Auth::attempt($auth);
         if ($checkAuth) {
+            $request->session()->regenerate();
             return redirect()->route('home')->with('success', 'Berhasil Login!');
         } else {
             return redirect()->route('login')->with('error', 'Email dan Password salahh.. Coba lagi!')->withInput();
         }
     }
 
-    public function logout() {
+    public function logout(Request $request)
+    {
         Auth::logout();
-
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('home')->with('success', 'Berhasil logout!');
     }
 }
