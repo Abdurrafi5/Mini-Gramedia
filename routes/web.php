@@ -12,7 +12,22 @@ Route::middleware(['IsLoggedIn'])->group(function () {
         UserController::class,
         'logout'
     ])->name('logout');
+
+    Route::prefix('admin')->name('admin.')->middleware('IsAdmin')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
+    });
 });
+
+// Route::middleware(['IsAdmin'])->group(function () {
+
+//     Route::prefix('admin')->name('admin.')->group(function () {
+//         Route::get('/dashboard', function () {
+//             return view('admin.dashboard');
+//         })->name('dashboard');
+//     });
+// });
 
 Route::middleware(['IsGuest'])->group(function () {
 

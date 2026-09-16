@@ -16,8 +16,8 @@ class UserController extends Controller
             'name' => ['required', 'min:3'],
             'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
             'password' => ['required', 'min:8', 'max:10', 'confirmed', Password::min(8)->max(10)->uncompromised()],
-        ], [
             'name.required' => 'Nama lengkap harus diisi',
+        ], [
             'name.min' => 'Nama lengkap harus diisi minimal 3 karakter',
             'email.required' => 'Email harus diisi',
             'email.unique' => 'Email harus diisi dengan data yang belum terdaftar',
@@ -46,10 +46,22 @@ class UserController extends Controller
         ]);
 
         $auth = $request->except(["_token"]);
-        $checkAuth = Auth::attempt($auth);
-        if ($checkAuth) {
+        // $checkAuth = Auth::attempt($auth);
+        // if ($checkAuth) {
+        //     $request->session()->regenerate();
+        //     return redirect()->route('home')->with('success', 'Berhasil Login!');
+        // } else {
+        //     return redirect()->route('login')->with('error', 'Email dan Password salahh.. Coba lagi!')->withInput();
+        // }
+
+        if (Auth::attempt($validateData)) {
             $request->session()->regenerate();
-            return redirect()->route('home')->with('success', 'Berhasil Login!');
+
+            if (Auth::user()->role == 'admin') {
+                return redirect()->route('admin.dashboard')->with('succes', 'Berhasil Login!');
+            } else {
+                return redirect()->route('home')->with('success', 'Berhasil Login!');
+            }
         } else {
             return redirect()->route('login')->with('error', 'Email dan Password salahh.. Coba lagi!')->withInput();
         }
