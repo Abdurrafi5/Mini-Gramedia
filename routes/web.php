@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SubscriptionPackageController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,10 @@ Route::middleware(['IsLoggedIn'])->group(function () {
         Route::resource('books', BookController::class);
     });
 });
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+
 
 Route::middleware(['IsGuest'])->group(function () {
 
