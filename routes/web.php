@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SubscriptionPackageBookController;
 use App\Http\Controllers\SubscriptionPackageController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -23,14 +24,20 @@ Route::middleware(['IsLoggedIn'])->group(function () {
             return view('admin.dashboard');
         })->name('dashboard');
 
+        // Book Category
         Route::resource('book-categories', BookCategoryController::class);
+        // Subscription Package
+        Route::get('subscription-packages/{id}/books', [SubscriptionPackageBookController::class, 'show'])->name('subscription-packages.books');
+        Route::post('subscription-packages/{id}/books', [SubscriptionPackageBookController::class, 'store'])->name('subscription-packages.books.store');
         Route::resource('subscription-packages', SubscriptionPackageController::class);
+        // Book
         Route::resource('books', BookController::class);
     });
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
+Route::get('/subscription-packages/{id}', [HomeController::class, 'subscriptionPackageDetail'])->name('subscription-packages.show');
 
 
 Route::middleware(['IsGuest'])->group(function () {

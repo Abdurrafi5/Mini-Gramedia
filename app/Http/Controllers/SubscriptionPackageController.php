@@ -21,6 +21,7 @@ class SubscriptionPackageController extends Controller
                 ->addColumn('action', function ($data) {
                     $editUrl = route('admin.subscription-packages.edit', $data->id);
                     $deleteUrl = route('admin.subscription-packages.destroy', $data->id);
+                    $books = route('admin.subscription-packages.books', $data->id);
                     $csrf = csrf_field();
                     $method = method_field('DELETE');
 
@@ -30,8 +31,7 @@ class SubscriptionPackageController extends Controller
                     class="d-inline">' . $csrf . $method . '<button type="submit" class="btn btn-sm btn-danger"
                     onclick="return confirm(\'Apakah Anda Yakin Ingin Menghapus Paket Langganan Ini?\')">Hapus</button>
                 </form>';
-
-                    return $btnEdit . $btnDelete;
+                    return $btnEdit . $btnDelete . '<a href="' . $books . '" class="btn btn-sm btn-info">Buku</a>';
                 })->rawColumns(['action'])->toJson();
         }
         return view('admin.subscription-packages.index');
