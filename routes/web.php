@@ -18,6 +18,8 @@ Route::middleware(['IsLoggedIn'])->group(function () {
         UserController::class,
         'logout'
     ])->name('logout');
+    Route::get('/subscription-packages/{id}/checkout', [SubscriptionPackageController::class, 'checkoutPage'])->name('subscription-packages.checkout.page');
+    Route::post('/subscription-packages/{id}/checkout', [SubscriptionPackageController::class, 'checkout'])->name('subscription-packages.checkout');
 
     Route::prefix('admin')->name('admin.')->middleware('IsAdmin')->group(function () {
         Route::get('/dashboard', function () {
